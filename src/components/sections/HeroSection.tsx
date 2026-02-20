@@ -3,7 +3,7 @@ import Button from "../ui/Button";
 
 function HeroSection() {
   return (
-    <section className="relative mt-16 overflow-hidden flex items-center justify-center min-h-[calc(100vh-4rem)]">
+    <section className="relative mt-16  overflow-hidden flex items-center justify-center h-dvh">
       {/* Background gradient */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-white" />

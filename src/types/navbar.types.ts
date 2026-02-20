@@ -4,4 +4,10 @@ type NavBarType = {
   onClick?: () => void;
 };
 
-export type { NavBarType };
+// moble nav types
+type MobileNavType = {
+  showMobileNavBar?: boolean;
+  setShowMobileNavBar: (value: boolean) => void;
+};
+
+export type { NavBarType, MobileNavType };
