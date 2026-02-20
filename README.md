@@ -1,6 +1,6 @@
 # Screenscope — Browser Screen Share Diagnostic
 
-Screenscope is a small, focused tool that helps you verify whether your browser supports screen sharing before you jump into a meeting or recording session. It runs entirely in your browser — nothing is uploaded, nothing is recorded.
+Screenscope is a small, focused tool that helps you verify whether your browser supports screen sharing before you jump into a meeting or recording session. It runs entirely in your browser - nothing is uploaded, nothing is recorded.
 
 Built with React, TypeScript, Tailwind CSS, and React Router.
 
@@ -8,7 +8,7 @@ Built with React, TypeScript, Tailwind CSS, and React Router.
 
 ## What It Does
 
-You click a button, your browser asks for screen sharing permission, and the app shows you a live preview of what your screen looks like along with some useful metadata — resolution, frame rate, and display surface type. When you stop sharing, the app cleans up everything properly and lets you retry if needed.
+You click a button, your browser asks for screen sharing permission, and the app shows you a live preview of what your screen looks like along with some useful metadata - resolution, frame rate, and display surface type. When you stop sharing, the app cleans up everything properly and lets you retry if needed.
 
 It also handles all the edge cases: what if you cancel the picker? What if permission is denied? What if your browser doesn't support it at all? Each situation gets its own clear UI state instead of a generic error message.
 
@@ -16,10 +16,10 @@ It also handles all the edge cases: what if you cancel the picker? What if permi
 
 ## Features
 
-- Permission request using native `getDisplayMedia` — no third-party libraries
+- Permission request using native `getDisplayMedia` - no third-party libraries
 - Handles every possible state: Idle, Requesting, Granted, Cancelled, Denied, Error, Stopped, Unsupported
 - Live local preview via `<video srcObject>`
-- Metadata display — resolution, frame rate, display surface
+- Metadata display - resolution, frame rate, display surface
 - Automatic stream termination detection via `track.onended`
 - Clean retry flow without stream reuse or memory leaks
 - Proper cleanup on manual stop, browser stop, and component unmount
@@ -45,7 +45,7 @@ It also handles all the edge cases: what if you cancel the picker? What if permi
 **Clone the repo**
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/iamayushkarma/screenscope
 cd <project-folder>
 ```
 
@@ -73,11 +73,11 @@ npm run build
 
 ## How Screen Sharing Works Under the Hood
 
-**1. Capability check**
+1. Capability check
 
-Before anything happens, the app checks whether `navigator.mediaDevices?.getDisplayMedia` exists. If it doesn't, the user sees an unsupported state immediately — no broken permission dialogs.
+Before anything happens, the app checks whether `navigator.mediaDevices?.getDisplayMedia` exists. If it doesn't, the user sees an unsupported state immediately - no broken permission dialogs.
 
-**2. Permission request**
+2. Permission request
 
 When the user clicks the button:
 
@@ -90,7 +90,7 @@ navigator.mediaDevices.getDisplayMedia({
 
 The browser shows its native screen picker. Depending on what happens, the app transitions to one of: Granted, Cancelled, Denied, or Error.
 
-**3. Live preview and metadata**
+3. Live preview and metadata
 
 Once granted, the stream is attached directly to a `<video>` element via `srcObject`. Metadata is pulled from:
 
@@ -100,7 +100,7 @@ track.getSettings();
 
 This gives us width, height, frame rate, and display surface (tab / window / entire screen). Nothing is stored or sent anywhere.
 
-**4. Lifecycle detection**
+4. Lifecycle detection
 
 The app listens for the user stopping the share from the browser's own UI:
 
@@ -110,9 +110,9 @@ track.onended = () => { ... }
 
 When that fires, tracks are stopped, references are cleared, and the UI moves to the Stopped state.
 
-**5. Cleanup**
+5. Cleanup
 
-Every exit path — manual stop button, browser stop, retry, component unmount — runs through the same cleanup function:
+Every exit path - manual stop button, browser stop, retry, component unmount - runs through the same cleanup function:
 
 ```ts
 stream.getTracks().forEach((track) => track.stop());
@@ -182,7 +182,7 @@ screenscope/
 
 ## Browser Support
 
-Works on Chromium-based browsers — Chrome and Edge. Firefox has partial support depending on version. Safari and most mobile browsers do not support `getDisplayMedia` at all, which is why the app checks for support upfront and shows a clear message instead of failing silently.
+Works on Chromium-based browsers - Chrome and Edge. Firefox has partial support depending on version. Safari and most mobile browsers do not support `getDisplayMedia` at all, which is why the app checks for support upfront and shows a clear message instead of failing silently.
 
 Screen sharing also requires a secure context, so in production the app needs to be served over HTTPS.
 
@@ -200,14 +200,17 @@ Screen sharing also requires a secure context, so in production the app needs to
 
 ## Screenshots
 
-Add screenshots here after deployment:
+**Home**
+![Home](src/screenshots/home.png)
 
-```
-/screenshots/home.png
-/screenshots/granted.png
-/screenshots/stopped.png
-/screenshots/unsupported.png
-```
+**Stream Active (Granted)**
+![Granted](src/screenshots/granted.png)
+
+**Stream Stopped**
+![Stopped](src/screenshots/stopped.png)
+
+**Unsupported Browser**
+![Unsupported](src/screenshots/unsupported.png)
 
 ---
 
@@ -219,4 +222,4 @@ ayushkarma.dev@gmail.com
 
 ## Live Demo
 
-url;
+[url;](https://your-deployed-url.com)
