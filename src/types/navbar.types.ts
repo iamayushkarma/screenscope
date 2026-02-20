@@ -1,6 +1,7 @@
 type NavBarType = {
   className?: string;
   children: React.ReactNode;
+  disabled?: boolean;
   onClick?: () => void;
 };
 

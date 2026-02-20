@@ -5,4 +5,5 @@ export type ScreenShareStatus =
   | "cancelled"
   | "denied"
   | "unsupported"
-  | "error";
+  | "error"
+  | "stopped";
