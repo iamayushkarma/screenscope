@@ -16,12 +16,6 @@ function Footer() {
             <Github className="size-3.5" />
             GitHub
           </a>
-          <a
-            href="#how-it-works"
-            className="hover:text-text-secondary  transition-colors"
-          >
-            How it works
-          </a>
         </div>
       </div>
     </footer>

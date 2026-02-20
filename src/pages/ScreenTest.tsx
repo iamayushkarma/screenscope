@@ -94,10 +94,13 @@ function ScreenTest() {
                 </p>
               </div>
               {isSupported && (
-                <Button onClick={startSharing}>
-                  <PlayCircle className="size-4" />
-                  Start Screen Test
-                </Button>
+                <div className="flex items-center justify-center gap-3">
+                  <Button onClick={startSharing}>
+                    <PlayCircle className="size-4" />
+                    Start Screen Test
+                  </Button>
+                  <Button onClick={() => navigate("/")}>Back to Home</Button>
+                </div>
               )}
             </div>
           )}

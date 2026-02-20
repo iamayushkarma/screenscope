@@ -10,11 +10,11 @@ export const NAV_LINKS = [
   },
   {
     label: "How It Works",
-    href: "#how-it-works",
+    href: "#how-it-work",
   },
   {
     label: "Support",
-    href: "#support",
+    href: "/support",
   },
 ];
 function Navbar() {
@@ -24,6 +24,15 @@ function Navbar() {
 
   useEffect(() => {
     setShowMobileNavBar(false);
+  }, [location]);
+
+  useEffect(() => {
+    if (location.hash) {
+      const el = document.querySelector(location.hash);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   }, [location]);
 
   // Prevent body scroll when mobile menu is open
