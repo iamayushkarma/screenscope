@@ -19,7 +19,7 @@ function Navbar() {
     },
   ];
   return (
-    <nav className="w-full h-16 border-b border-gray-200 bg-white">
+    <nav className="w-full h-16 border-b border-gray-200 bg-white/60 backdrop-blur-md fixed top-0 z-50">
       <div className="flex items-center justify-between w-11/12 max-w-6xl mx-auto h-full">
         {/* Logo */}
         <div className="flex items-center gap-2">
