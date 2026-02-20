@@ -1,73 +1,222 @@
-# React + TypeScript + Vite
+# Screenscope — Browser Screen Share Diagnostic
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Screenscope is a small, focused tool that helps you verify whether your browser supports screen sharing before you jump into a meeting or recording session. It runs entirely in your browser — nothing is uploaded, nothing is recorded.
 
-Currently, two official plugins are available:
+Built with React, TypeScript, Tailwind CSS, and React Router.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## What It Does
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+You click a button, your browser asks for screen sharing permission, and the app shows you a live preview of what your screen looks like along with some useful metadata — resolution, frame rate, and display surface type. When you stop sharing, the app cleans up everything properly and lets you retry if needed.
 
-## Expanding the ESLint configuration
+It also handles all the edge cases: what if you cancel the picker? What if permission is denied? What if your browser doesn't support it at all? Each situation gets its own clear UI state instead of a generic error message.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Permission request using native `getDisplayMedia` — no third-party libraries
+- Handles every possible state: Idle, Requesting, Granted, Cancelled, Denied, Error, Stopped, Unsupported
+- Live local preview via `<video srcObject>`
+- Metadata display — resolution, frame rate, display surface
+- Automatic stream termination detection via `track.onended`
+- Clean retry flow without stream reuse or memory leaks
+- Proper cleanup on manual stop, browser stop, and component unmount
+- Mobile-aware layout with stable viewport height
+- Active nav link highlighting
+- 404 page
+- Support page with troubleshooting guidance
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## Tech Stack
+
+- React + Vite
+- TypeScript
+- Tailwind CSS v4
+- React Router DOM
+- Native Web APIs only (`getDisplayMedia`, `MediaStreamTrack`)
+
+---
+
+## Getting Started
+
+**Clone the repo**
+
+```bash
+git clone <your-repo-url>
+cd <project-folder>
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+**Install dependencies**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+**Start the dev server**
+
+```bash
+npm run dev
+```
+
+Then open `http://localhost:5173` in Chrome or Edge.
+
+**Build for production**
+
+```bash
+npm run build
+```
+
+---
+
+## How Screen Sharing Works Under the Hood
+
+**1. Capability check**
+
+Before anything happens, the app checks whether `navigator.mediaDevices?.getDisplayMedia` exists. If it doesn't, the user sees an unsupported state immediately — no broken permission dialogs.
+
+**2. Permission request**
+
+When the user clicks the button:
+
+```ts
+navigator.mediaDevices.getDisplayMedia({
+  video: { frameRate: { ideal: 30 } },
+  audio: false,
+});
+```
+
+The browser shows its native screen picker. Depending on what happens, the app transitions to one of: Granted, Cancelled, Denied, or Error.
+
+**3. Live preview and metadata**
+
+Once granted, the stream is attached directly to a `<video>` element via `srcObject`. Metadata is pulled from:
+
+```ts
+track.getSettings();
+```
+
+This gives us width, height, frame rate, and display surface (tab / window / entire screen). Nothing is stored or sent anywhere.
+
+**4. Lifecycle detection**
+
+The app listens for the user stopping the share from the browser's own UI:
+
+```ts
+track.onended = () => { ... }
+```
+
+When that fires, tracks are stopped, references are cleared, and the UI moves to the Stopped state.
+
+**5. Cleanup**
+
+Every exit path — manual stop button, browser stop, retry, component unmount — runs through the same cleanup function:
+
+```ts
+stream.getTracks().forEach((track) => track.stop());
+```
+
+This prevents stale streams, memory leaks, and the browser's "tab is still sharing" indicator from getting stuck.
+
+---
+
+## Project Structure
+
+```
+screenscope/
+├── public/
+│   └── vite.svg
+├── src/
+│   ├── assets/
+│   │   └── react.svg
+│   ├── components/
+│   │   ├── commen/
+│   │   │   ├── DeskTopNavbar.tsx
+│   │   │   ├── Footer.tsx
+│   │   │   ├── MobileNavMenu.tsx
+│   │   │   └── Navbar.tsx
+│   │   ├── sections/
+│   │   │   ├── HeroSection.tsx
+│   │   │   └── HowItWorks.tsx
+│   │   └── ui/
+│   │       ├── Button.tsx
+│   │       └── ShimmerButton.tsx
+│   ├── hooks/
+│   │   └── useScreenShare.ts
+│   ├── layout/
+│   │   └── MainLayout.tsx
+│   ├── pages/
+│   │   ├── HomePage.tsx
+│   │   ├── PageNotFound.tsx
+│   │   ├── ScreenTest.tsx
+│   │   └── Support.tsx
+│   ├── screenshots/
+│   │   ├── granted.png
+│   │   ├── home.png
+│   │   ├── stopped.png
+│   │   └── unsupported.png
+│   ├── types/
+│   │   ├── HowItWorkCard.types.ts
+│   │   ├── navbar.types.ts
+│   │   └── screen.types.ts
+│   ├── utils/
+│   ├── App.tsx
+│   ├── index.css
+│   └── main.tsx
+├── .gitignore
+├── README.md
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── tailwind.config.js
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
+```
+
+---
+
+## Browser Support
+
+Works on Chromium-based browsers — Chrome and Edge. Firefox has partial support depending on version. Safari and most mobile browsers do not support `getDisplayMedia` at all, which is why the app checks for support upfront and shows a clear message instead of failing silently.
+
+Screen sharing also requires a secure context, so in production the app needs to be served over HTTPS.
+
+---
+
+## Privacy
+
+- No video is recorded
+- No screen data leaves your device
+- No account required
+- No analytics or tracking
+- Everything runs locally in your browser
+
+---
+
+## Screenshots
+
+Add screenshots here after deployment:
+
+```
+/screenshots/home.png
+/screenshots/granted.png
+/screenshots/stopped.png
+/screenshots/unsupported.png
+```
+
+---
+
+## Contact
+
+ayushkarma.dev@gmail.com
+
+---
+
+## Live Demo
+
+url;
