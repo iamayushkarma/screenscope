@@ -222,4 +222,4 @@ ayushkarma.dev@gmail.com
 
 ## Live Demo
 
-[url;](https://screenscope.vercel.app/)
+[screenscope.vercel.app](https://screenscope.vercel.app/)
