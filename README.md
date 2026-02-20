@@ -1,4 +1,4 @@
-# Screenscope — Browser Screen Share Diagnostic
+# Screenscope - Browser Screen Share Diagnostic
 
 Screenscope is a small, focused tool that helps you verify whether your browser supports screen sharing before you jump into a meeting or recording session. It runs entirely in your browser - nothing is uploaded, nothing is recorded.
 
@@ -222,4 +222,4 @@ ayushkarma.dev@gmail.com
 
 ## Live Demo
 
-[url;](https://your-deployed-url.com)
+[url;](https://screenscope.vercel.app/)
