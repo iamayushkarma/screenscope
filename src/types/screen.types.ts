@@ -1,5 +1,5 @@
 export type ScreenShareStatus =
-  | "idle"
+  | "idle" //  initial or default state
   | "requesting"
   | "granted"
   | "cancelled"

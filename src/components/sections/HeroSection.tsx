@@ -21,7 +21,7 @@ function HeroSection() {
         </span>
 
         <h2 className="text-4xl font-semibold md:text-6xl lg:text-7xl text-text-primary tracking-tight leading-[1.1] mb-6 max-w-3xl">
-          Test Your Screen Sharing in Seconds
+          Screen Share Test App
         </h2>
         <p className="text-[.9rem] md:text-xl text-text-secondary max-w-2xl leading-relaxed mb-10">
           Verify browser permissions, check resolution, and monitor your stream
@@ -33,7 +33,7 @@ function HeroSection() {
           disabled={status === "requesting"}
           onClick={handleStart}
         >
-          Start Diagnostics
+          Start Screen Test
         </ShimmerButton>
         <div className="flex items-center justify-center gap-3 mt-6 text-xs font-medium flex-wrap text-text-muted">
           <span className="flex items-center gap-1">
