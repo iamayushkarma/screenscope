@@ -18,18 +18,21 @@ export function useScreenShare() {
   const isSupported = !!navigator.mediaDevices?.getDisplayMedia;
   const streamRef = useRef<MediaStream | null>(null);
 
+  // Cleanup function (stop and clean up the stream)
   const cleanup = (updateStatus = true) => {
-    if (!streamRef.current) return;
-    streamRef.current.getTracks().forEach((track) => track.stop());
+    if (!streamRef.current) return; // If there's no active stream in the ref, do nothing and exit.
+    streamRef.current.getTracks().forEach((track) => track.stop()); //Stop all tracks to end the session at the OS level.
     streamRef.current = null;
     setStream(null);
     setMetadata(null);
     if (updateStatus) setStatus("stopped");
   };
+  // Runs cleanup function once on every mount
   useEffect(() => {
     return () => cleanup(false);
   }, []);
 
+  // Start haring function
   const startSharing = async () => {
     if (!navigator.mediaDevices?.getDisplayMedia) {
       setStatus("unsupported");
@@ -42,11 +45,13 @@ export function useScreenShare() {
       setError(null);
       cleanup(false);
 
+      // Browser API call, it opens the screen picker dialog
       const mediaStream = await navigator.mediaDevices.getDisplayMedia({
         video: { frameRate: { ideal: 30 } },
-        audio: false,
+        audio: false, // No system audio captured
       });
 
+      // Gets video track from the stream, then reads its actual settings
       const track = mediaStream.getVideoTracks()[0];
       const settings = track.getSettings();
 
@@ -57,26 +62,29 @@ export function useScreenShare() {
         displaySurface: settings.displaySurface,
       });
 
+      // Listen for the browser's native stop button (not our ui stop button) to reset the UI.
+      // This cleans up state and marks the session as "stopped" when the user ends it externally.
       track.onended = () => {
-        streamRef.current?.getTracks().forEach((t) => t.stop());
+        streamRef.current?.getTracks().forEach((track) => track.stop());
         streamRef.current = null;
         setStream(null);
         setStatus("stopped");
       };
 
+      // Store the active stream and set status to 'granted' to sync the UI.
       streamRef.current = mediaStream;
       setStream(mediaStream);
       setStatus("granted");
-    } catch (err: any) {
-      if (err.name === "AbortError") {
+    } catch (error: any) {
+      if (error.name === "AbortError") {
         setStatus("cancelled");
         toast("Screen selection cancelled.");
-      } else if (err.name === "NotAllowedError") {
+      } else if (error.name === "NotAllowedError") {
         setStatus("denied");
         toast.error("Permission denied for screen sharing.");
       } else {
         setStatus("error");
-        setError(err.message);
+        setError(error.message);
         toast.error("Unexpected error occurred.");
       }
     }
