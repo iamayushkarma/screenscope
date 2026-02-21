@@ -200,17 +200,21 @@ Screen sharing also requires a secure context, so in production the app needs to
 
 ## Screenshots
 
-**Home**
-![Home](src/screenshots/home.png)
+## Home
 
-**Stream Active (Granted)**
-![Granted](src/screenshots/granted.png)
+![Home](/screenshots/home.png)
 
-**Stream Stopped**
-![Stopped](src/screenshots/stopped.png)
+## Stream Active (Granted)
 
-**Unsupported Browser**
-![Unsupported](src/screenshots/unsupported.png)
+![Granted](/screenshots/granted.png)
+
+## Stream Stopped
+
+![Stopped](/screenshots/stopped.png)
+
+## Unsupported Browser
+
+![Unsupported](/screenshots/unsupported.png)
 
 ---
 
