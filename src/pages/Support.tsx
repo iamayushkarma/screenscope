@@ -1,18 +1,15 @@
 import { AlertTriangle, ShieldCheck, Info } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/ui/Button";
-import { useLayoutEffect } from "react";
+import { NavigateToTop } from "../utils/functions/NavigateToTop";
 
 function Support() {
   const navigate = useNavigate();
 
-  useLayoutEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  NavigateToTop();
 
   return (
     <section className="relative mt-16 flex items-center justify-center min-h-[calc(100vh-4rem)] px-6 overflow-hidden">
-      {/* Background blobs (same style as your other pages) */}
       <div
         className="absolute top-0 left-1/4 w-96 h-96 rounded-full pointer-events-none -z-10"
         style={{

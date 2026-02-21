@@ -4,6 +4,7 @@ import { ScreenShare, Menu, X } from "lucide-react";
 import type { MobileNavType } from "../../types/navbar.types";
 import { NAV_LINKS } from "./Navbar";
 import { useScreenShare } from "../../hooks/useScreenShare";
+import { handleHashClick } from "../../utils/functions/HandleHashClick";
 
 function DeskTopNavbar({
   showMobileNavBar,
@@ -13,22 +14,10 @@ function DeskTopNavbar({
   const location = useLocation();
   const { isSupported } = useScreenShare();
 
+  // Starts screen test
   const handleStart = () => {
     if (!isSupported) return;
     navigate("/screen-test");
-  };
-
-  const handleHashClick = (e: React.MouseEvent, href: string) => {
-    e.preventDefault();
-    const id = href.replace("#", "");
-    if (location.pathname !== "/") {
-      navigate("/");
-      setTimeout(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    } else {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    }
   };
 
   return (
@@ -48,7 +37,9 @@ function DeskTopNavbar({
             <a
               key={index}
               href={navLink.href}
-              onClick={(e) => handleHashClick(e, navLink.href)}
+              onClick={(e) =>
+                handleHashClick(e, navLink.href, navigate, location.pathname)
+              }
               className="text-gray-500 hover:text-gray-900 transition-colors"
             >
               {navLink.label}

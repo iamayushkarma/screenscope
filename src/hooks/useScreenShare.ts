@@ -97,6 +97,6 @@ export function useScreenShare() {
     error,
     isSupported,
     startSharing,
-    stopSharing: cleanup,
+    stopSharing: cleanup, // export cleanup function as stopSharing
   };
 }

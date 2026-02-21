@@ -22,11 +22,13 @@ function Navbar() {
 
   const location = useLocation();
 
+  // Close mobile menu on navigation
   useEffect(() => {
     setShowMobileNavBar(false);
   }, [location]);
 
   useEffect(() => {
+    // Handles anchor/hash navigation manually
     if (location.hash) {
       const el = document.querySelector(location.hash);
       if (el) {

@@ -1,25 +1,11 @@
 import { NAV_LINKS } from "./Navbar";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import type { MobileNavType } from "../../types/navbar.types";
+import { handleHashClick } from "../../utils/functions/HandleHashClick";
 
 function MobileNavMenu({ setShowMobileNavBar }: MobileNavType) {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const handleHashClick = (e: React.MouseEvent, href: string) => {
-    e.preventDefault();
-    setShowMobileNavBar(false);
-    const id = href.replace("#", "");
-
-    if (location.pathname !== "/") {
-      navigate("/");
-      setTimeout(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    } else {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   return (
     <div className="fixed top-16 left-0 right-0 bottom-0 bg-background-secondary z-100">
@@ -30,7 +16,9 @@ function MobileNavMenu({ setShowMobileNavBar }: MobileNavType) {
               <a
                 key={index}
                 href={navLink.href}
-                onClick={(e) => handleHashClick(e, navLink.href)}
+                onClick={(e) =>
+                  handleHashClick(e, navLink.href, navigate, location.pathname)
+                }
                 className="text-text-muted hover:text-text-secondary transition-colors"
               >
                 {navLink.label}

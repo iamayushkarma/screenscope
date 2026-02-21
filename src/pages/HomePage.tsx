@@ -1,11 +1,9 @@
-import { useLayoutEffect } from "react";
 import HeroSection from "../components/sections/HeroSection";
 import HowItWorks from "../components/sections/HowItWorks";
+import { NavigateToTop } from "../utils/functions/NavigateToTop";
 
 function HomePage() {
-  useLayoutEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  NavigateToTop();
 
   return (
     <div className="relative overflow-hidden">

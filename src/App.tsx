@@ -8,7 +8,7 @@ import Support from "./pages/Support";
 
 function App() {
   return (
-    <div>
+    <>
       <Toaster />
       <Routes>
         <Route element={<MainLayout />}>
@@ -18,7 +18,7 @@ function App() {
         <Route path="/screen-test" element={<ScreenTest />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
-    </div>
+    </>
   );
 }
 

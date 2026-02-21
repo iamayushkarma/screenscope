@@ -7,8 +7,9 @@ import {
 } from "lucide-react";
 import Button from "../components/ui/Button";
 import { useScreenShare } from "../hooks/useScreenShare";
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { NavigateToTop } from "../utils/functions/NavigateToTop";
 
 function ScreenTest() {
   const { status, stream, metadata, isSupported, startSharing, stopSharing } =
@@ -16,9 +17,7 @@ function ScreenTest() {
   const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  useLayoutEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  NavigateToTop(); // Navigate to top on mount
 
   useEffect(() => {
     if (!videoRef.current) return;
